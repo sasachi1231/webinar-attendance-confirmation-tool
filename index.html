@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirect...</title>
+    <script src="ncmb.min.js"></script>
+    <script src="api_key.js"></script>
+</head>
+<body>
+    <p>please wait for access webinar page...</p>
+    <script>
+        function getParam(name, url) {
+           if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        var ncmb = new NCMB(appkey, clientkey);
+
+        var title = getParam('title');
+        var uid = Number(getParam('uid')); 
+
+        console.log(title);
+        console.log(uid);
+
+        var DataStore = ncmb.DataStore(title);
+        DataStore.equalTo('uid', uid)
+        .fetch().
+        then(function(results){
+            console.log(results);
+            results.set('attendance', '出席');
+            return results.update();
+        })
+        .then(function(results){
+            location.href = results.webinarUrl;
+        });
+    </script>
+</body>
+</html>

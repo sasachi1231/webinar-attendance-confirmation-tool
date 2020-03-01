@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Setting</title>
+    <script src="ncmb.min.js"></script>
+    <script src="api_key.js"></script>
+    <script>
+        var ncmb = new NCMB(appkey, clientkey);
+
+        async function create_new_webinar(classname, time, url) {
+            document.getElementById('result').innerHTML = '作成中……';
+            await write_to_datastore(classname, time, url);
+            document.getElementById('result').innerHTML = '完了！';
+        }
+
+        async function write_to_datastore(classname, time, url) {
+            for(var i=0; i<time; i++){
+                var DataStore = ncmb.DataStore(classname);
+                var dataStore = new DataStore;
+                dataStore.set('uid', i);
+                dataStore.set('attendanceUrl', 'https://mbaas.api.nifcloud.com/2013-09-01/applications/' + applicationId + '/publicFiles/index.html' + '?title=' + classname + '&uid=' + i);
+                dataStore.set('webinarUrl', url);
+                dataStore.save();
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <h1>ウェビナー出席確認ツール</h1>
+    <h2>新しいウェビナーを作成する</h2>
+    <p>セミナー名称<br>(半角英数のみ。NCMBデータストアのクラス名になります。これまでのものとかぶらないようにしてください)</p>
+    <input type="text" id="class">
+    <p>URL発行数<br>(半角数字のみを入力してください。カンマで区切るのもNGです)</p>
+    <input type="text" id="people">
+    <p>ウェビナーURL<br>(実際のウェビナーURLを入力してください)</p>
+    <input type="text" id="url">
+    <hr>
+    <button onclick="create_new_webinar(document.getElementById('class').value, document.getElementById('people').value, document.getElementById('url').value)">作成</button>
+    <p id="result"></p>
+</body>
+</html>
