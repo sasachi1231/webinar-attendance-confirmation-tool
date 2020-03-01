@@ -1,4 +1,4 @@
-# Webinar attendance donvirmation tool
+# Webinar attendance confirmation tool
 
 ニフクラ mobile backend(以下、NCMB)を使ったウェビナーの出席確認ができるurlの生成並びに出席結果の確認ができるツール。
 
